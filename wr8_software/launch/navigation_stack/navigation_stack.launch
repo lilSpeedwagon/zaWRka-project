@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- 
+Navigation stack (SLAM or Localization) 
+You must run it with navigation_type argument.
+-->
+<launch>
+  <!-- Choose navigation type and other settings-->
+  <arg name="navigation_type" doc="[slam, localization]"/>
+  <arg name="mapping_algorithm" default="hector_mapping" doc="[gmapping, heactor_mapping]"/>
+  <arg name="map" default="map2_h" doc="[map2_h, depart]"/>
+
+  <!-- Run SLAM part if slam chosen -->
+  <group if="$(eval arg('navigation_type') =='slam')">
+    <include file="$(find wr8_software)/launch/navigation_stack/$(arg mapping_algorithm).launch">
+      <arg name="base_frame"    value="base_link" />
+      <arg name="map_resol"     value="0.05"/>
+    </include>
+  </group>
+
+  <!-- Run Localization part if localization chosen -->
+  <group if="$(eval arg('navigation_type') =='localization')">
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find wr8_software)/maps/$(arg map).yaml" />
+    <include file="$(find wr8_software)/launch/navigation_stack/amcl.launch">
+      <arg name="base_frame"    value="base_link" />
+      <arg name="odom_frame"    value="odom" />
+      <arg name="global_frame"  value="map" />
+    </include>
+  </group>
+
+  <!-- Run common part -->
+  <include file="$(find wr8_software)/launch/navigation_stack/move_base.launch">
+    <arg name="base_frame"    value="base_link" />
+    <arg name="odom_frame"    value="odom"/>
+    <arg name="global_frame"  value="map"/>
+    <arg name="odom_topic"    value="robot/odom" />
+    <arg name="cmd_topic"     value="robot/cmd_vel" />
+  </include>
+  <include file="$(find wr8_software)/launch/navigation_stack/slime.launch">
+    <arg name="global_frame"  value="map" />
+    <arg name="track_frame"   value="base_link"/>
+    <arg name="update_rate"   value="10" />
+    <arg name="publish_rate"  value="6.0" />
+  </include>
+</launch>

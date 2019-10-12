@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- Start full stack of localization simulator -->
+<launch>
+  <!-- Start robot simulation and visualization-->
+  <include file="$(find wr8_description)/launch/gazebo.launch"/>
+  <include file="$(find wr8_software)/launch/rviz_localization_view.launch"/>
+
+  <!-- Start localization stack -->
+  <include file="$(find wr8_software)/launch/navigation_stack/navigation_stack.launch">
+    <arg name="navigation_type" value="localization"/>
+  </include>
+</launch>

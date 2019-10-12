@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- Start full stack of SLAM simulator on PC -->
+<launch>
+  <!-- Arguments -->
+  <arg name="mapping_algorithm" default="gmapping" doc="[hector_mapping, gmapping]"/>
+
+  <!-- Start robot simulation and visualization-->
+  <include file="$(find wr8_description)/launch/gazebo.launch"/>
+  <include file="$(find wr8_software)/launch/rviz_slam_view.launch"/>
+
+  <!-- Start SLAM navigation stack -->
+  <include file="$(find wr8_software)/launch/navigation_stack/navigation_stack.launch">
+    <arg name="mapping_algorithm" value="hector_mapping"/>
+    <arg name="navigation_type" value="slam"/>
+  </include>
+</launch>

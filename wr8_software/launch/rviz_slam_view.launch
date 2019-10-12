@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
+<!-- Open rviz with settings -->
 <launch>
-
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find wr8_software)/rviz/nav.rviz" />
-
 </launch>
