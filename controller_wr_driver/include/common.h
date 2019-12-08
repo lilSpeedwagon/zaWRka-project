@@ -16,7 +16,6 @@ extern "C" {
 /***    DRIVE CONTROL RELATED           ***/
 #define     PROGRAM_ROUTINE_TEST_LL_DRIVER              1
 #define     PROGRAM_ROUTINE_TEST_RAW_LL_DRIVE           2
-#define     PROGRAM_ROUTINE_TEST_ESC_CALIBRATION        3
 /***    ENCODER / ODOMETRY RELATED      ***/
 #define     PROGRAM_ROUTINE_TEST_ENCODER                4
 #define     PROGRAM_ROUTINE_TEST_ODOMETRY               5
@@ -40,14 +39,12 @@ extern "C" {
 #define		PROGRAM_ROUTINE_TEST_LED_MATRIX				19
 /***    BUTTON RELATED                  ***/
 #define     PROGRAM_ROUTINE_TEST_BUTTON_STATE           20
-/***    ROS RELATED                     ***/
-#define     PROGRAM_ROUTINE_TEST_ROS_ODOMETRY           30
-#define     PROGRAM_ROUTINE_TEST_ROS_CONTROL            35
-#define     PROGRAM_ROUTINE_TEST_GUI_SERVER             40
-#define     PROGRAM_ROUTINE_TEST_ROS                    60
+/***    LINK RELATED                     ***/
+#define     PROGRAM_ROUTINE_TEST_LINK_CONTROL           61
+#define     PROGRAM_ROUTINE_TEST_LINK                   62
+#define     PROGRAM_ROUTINE_TEST_LINK_ADC_CALIB         63
 
-#define     MAIN_PROGRAM_ROUTINE                        PROGRAM_ROUTINE_TEST_STEER_ANGL_SEND
-
+#define     MAIN_PROGRAM_ROUTINE                        PROGRAM_ROUTINE_TEST_LINK_CONTROL
 
 /*============================================================================*/
 /* MACROS 																	  */
@@ -118,28 +115,18 @@ typedef struct range_map
     float b;
 } range_map_t;
 
-inline static void range_map_init(range_map_t   *ctx, 
-                                  float         in_min, 
-                                  float         in_max, 
-                                  float         out_min, 
-                                  float         out_max)
-{
-    if ( !ctx )
-        return;
+void range_map_init(range_map_t   *ctx, 
+                    float         in_min, 
+                    float         in_max, 
+                    float         out_min, 
+                    float         out_max);
 
-    ctx->k = (out_max - out_min)/(in_max - in_min);
-    ctx->b = (out_min - ctx->k * in_min);
-}
+void range_map_init_raw(range_map_t   *ctx, 
+                        float         k, 
+                        float         b);
 
-inline static float range_map_call(range_map_t   *ctx,
-                                   float         val)
-{
-    if ( !ctx )
-        return 0;
-
-    return (ctx->k * val + ctx->b);
-}
-
+float range_map_call(range_map_t   *ctx,
+                     float         val);
 
 #ifdef __cplusplus
 }

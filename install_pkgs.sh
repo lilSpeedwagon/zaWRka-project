@@ -25,9 +25,11 @@ sudo apt install ros-$ROS_DISTRO-base-local-planner \
 					ros-$ROS_DISTRO-interactive-markers \
 					ros-$ROS_DISTRO-key-teleop \
 					ros-$ROS_DISTRO-gmapping \
-					qt4-default \
+					ros-$ROS_DISTRO-camera-info-manager \
+					ros-$ROS_DISTRO-roslint \
 					libsuitesparse-dev 
 
 
+git -C madproto pull  || git clone https://github.com/KaiL4eK/madproto.git
 git -C wr8_gui_server/smart_vehicle_gui pull 	|| git -C wr8_gui_server clone https://github.com/lilSpeedwagon/smart_vehicle_gui.git
 git -C elp_stereo_camera pull					|| git clone https://github.com/KaiL4eK/elp_stereo_camera.git
